@@ -1,38 +1,27 @@
-import styled from "styled-components";
-import GlobalStyles from "./styles/GlobalStyles";
-import Input from "./ui/Input";
-import Button from "./ui/Button";
-import Heading from "./ui/heading";
-import Row from "./ui/Row";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-const StyledApp = styled.div`
-  padding: 20px;
-`;
+import Dashboard from "./pages/Dashboard";
+import Bookings from "./pages/Bookings";
+import Account from "./pages/Account";
+import Cabins from "./pages/Cabins";
+import Settings from "./pages/Settings";
+import Users from "./pages/Users";
+import Login from "./pages/Login";
+import PageNotFound from "./pages/PageNotFound";
+
+const router = createBrowserRouter([
+  { path: "dashboard", element: <Dashboard /> },
+  { path: "bookings", element: <Bookings /> },
+  { path: "account", element: <Account /> },
+  { path: "cabins", element: <Cabins /> },
+  { path: "settings", element: <Settings /> },
+  { path: "users", element: <Users /> },
+  { path: "login", element: <Login /> },
+  { path: "*", element: <PageNotFound /> },
+]);
 
 const App = () => {
-  return (
-    <>
-      <GlobalStyles />
-      <StyledApp>
-        <Row type="vertical">
-          <Row type="horizontal">
-            <Heading as="h1">The Wild Oasis</Heading>
-            <div>
-              <Heading as="h2">Check In</Heading>
-              <Button onClick={() => alert("Check in")}>Check in</Button>
-              <Button onClick={() => alert("Check out")}>Check out</Button>
-            </div>
-          </Row>
-          <Row type="vertical">
-            <Heading as="h3">Form</Heading>
-            <form>
-              <Input type="number" placeholder="number of guests" />
-            </form>
-          </Row>
-        </Row>
-      </StyledApp>
-    </>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
