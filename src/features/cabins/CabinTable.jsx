@@ -34,7 +34,7 @@ const CabinTable = () => {
     data: cabins,
     errors,
   } = useQuery({
-    queryKey: ["cabin"],
+    queryKey: ["cabins"],
     queryFn: getCabins,
   });
 
