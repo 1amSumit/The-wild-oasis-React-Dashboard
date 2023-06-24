@@ -8,20 +8,16 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
-import { addEditCabins } from "../../services/apiCabins";
+import { addCabins } from "../../services/apiCabins";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
-  const { id: editId, ...editValues } = cabinToEdit;
-  const isEditSession = Boolean(editId);
+function CreateCabinForm() {
   const { register, handleSubmit, isCreating, reset, getValues, formState } =
-    useForm({
-      defaultValues: isEditSession ? editValues : {},
-    });
+    useForm();
   const { errors } = formState;
   const querClient = useQueryClient();
 
   const { isLoading, mutate } = useMutation({
-    mutationFn: addEditCabins,
+    mutationFn: addCabins,
     onSuccess: () => {
       toast.success("New Cabin successfully created!");
       querClient.invalidateQueries({
@@ -117,7 +113,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           accept="image/*"
           type="file"
           {...register("image", {
-            required: isEditSession ? false : "This field is required",
+            required: "This field is required",
           })}
         />
       </FormRow>
@@ -128,7 +124,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           Cancel
         </Button>
         <Button disabled={isLoading}>
-          {isEditSession ? "Edit cabn" : "Add cabin"}
+          {isLoading ? "Adding..." : "Add Cabin"}
         </Button>
       </FormRow>
     </Form>
