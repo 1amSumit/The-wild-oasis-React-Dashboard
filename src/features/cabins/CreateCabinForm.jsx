@@ -20,7 +20,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const { errors } = formState;
   const querClient = useQueryClient();
 
-  const { isLoading, mutate } = useMutation({
+  const { isLoading: isCreatingMutate, mutate: createCabin } = useMutation({
     mutationFn: addEditCabins,
     onSuccess: () => {
       toast.success("New Cabin successfully created!");
@@ -34,8 +34,29 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     },
   });
 
+  const { isLoading: isEditing, mutate: editCabin } = useMutation({
+    mutationFn: ({ newCabinData, id }) => addEditCabins(newCabinData, id),
+    onSuccess: () => {
+      toast.success("Cabin successfully updated!");
+      querClient.invalidateQueries({
+        queryKey: ["cabins"],
+      });
+      reset();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const isWorking = isCreatingMutate || isEditing;
+
   const submitForm = (data) => {
-    mutate({ ...data, image: data.image[0] });
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+    if (isEditSession) {
+      editCabin({ newCabinData: { ...data, image: image }, id: editId });
+    } else {
+      createCabin({ ...data, image: image });
+    }
   };
   const onError = (errors) => {
     console.log(errors);
@@ -73,7 +94,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="regularPrice"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register("regularPrice", {
             required: "This field is required",
           })}
@@ -84,7 +105,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="discount"
-          disabled={isCreating}
+          disabled={isWorking}
           defaultValue={0}
           {...register("discount", {
             required: "This field is required",
@@ -102,7 +123,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Textarea
           type="number"
           id="description"
-          disabled={isCreating}
+          disabled={isWorking}
           defaultValue=""
           {...register("description", {
             required: "This field is required",
@@ -113,7 +134,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       <FormRow label="Cabin Photo">
         <FileInput
           id="image"
-          disabled={isCreating}
+          disabled={isWorking}
           accept="image/*"
           type="file"
           {...register("image", {
@@ -127,7 +148,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isLoading}>
+        <Button disabled={isWorking}>
           {isEditSession ? "Edit cabn" : "Add cabin"}
         </Button>
       </FormRow>
