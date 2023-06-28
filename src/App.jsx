@@ -24,7 +24,6 @@ const queryClient = new QueryClient({
 
 const router = createBrowserRouter([
   {
-    path: "/",
     element: <AppLayout />,
     children: [
       { path: "dashboard", element: <Dashboard /> },
