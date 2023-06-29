@@ -24,8 +24,10 @@ const queryClient = new QueryClient({
 
 const router = createBrowserRouter([
   {
+    path: "/",
     element: <AppLayout />,
     children: [
+      { index: true, element: <Dashboard /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "bookings", element: <Bookings /> },
       { path: "account", element: <Account /> },
@@ -34,7 +36,6 @@ const router = createBrowserRouter([
       { path: "users", element: <Users /> },
     ],
   },
-
   { path: "login", element: <Login /> },
   { path: "*", element: <PageNotFound /> },
 ]);
