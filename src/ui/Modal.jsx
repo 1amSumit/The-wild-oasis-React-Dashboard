@@ -2,6 +2,7 @@ import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
+import useClick from "../hooks/useClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -77,11 +78,13 @@ const Open = ({ children, opens: openWindowName }) => {
 const Window = ({ children, name }) => {
   const { openName, close } = useContext(ModalCtx);
 
+  const ref = useClick(close, true);
+
   if (name !== openName) return null;
 
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiXMark />
         </Button>
