@@ -5,16 +5,11 @@ import CabinRow from "./CabinRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
+import Empty from "../../ui/Empty";
+import useCabins from "./useCabins";
 
 const CabinTable = () => {
-  const {
-    isLoading,
-    data: cabins,
-    errors,
-  } = useQuery({
-    queryKey: ["cabins"],
-    queryFn: getCabins,
-  });
+  const { isLoading, error, cabins } = useCabins();
 
   const [searchParams] = useSearchParams();
 
@@ -23,6 +18,8 @@ const CabinTable = () => {
   //1) Filter
 
   const filterValue = searchParams.get("discount") || "all";
+
+  if (!cabins.length) return <Empty resourceName="cabins" />;
 
   let filteredCabins;
   if (filterValue === "all") filteredCabins = cabins;

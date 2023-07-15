@@ -1,4 +1,4 @@
-import supabase from "./subabase";
+import supabase from "./supabase";
 
 export async function getSettings() {
   const { data, error } = await supabase.from("settings").select("*").single();
