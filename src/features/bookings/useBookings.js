@@ -19,7 +19,8 @@ const useBookings = () => {
 
   //Pagination
 
-  const page = searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+  const page = searchParams.get("page") || 1;
+  console.log(page);
 
   const {
     isLoading,
